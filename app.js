@@ -291,19 +291,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!svg) return;
 
     svg.innerHTML = '';
-    const width = svg.clientWidth || 800;
-    const height = svg.clientHeight || 400;
-    const isModal = svgId === 'modal-bump-chart-svg';
-    
-    // Ample padding for single line wide badges (Left padding 160px guarantees 2021학년도 is 100% inside view)
-    const padding = isModal 
-      ? { top: 40, right: 220, bottom: 65, left: 160 }
-      : { top: 30, right: 170, bottom: 65, left: 120 };
 
-    const chartW = width - padding.left - padding.right;
-    const chartH = height - padding.top - padding.bottom;
+    // Fixed internal SVG viewBox coordinate system for 100% crisp & accurate scaling
+    const viewBoxWidth = 1200;
+    const viewBoxHeight = 560;
 
-    const years = ADMISSIONS_DATA.years;
+    svg.setAttribute('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`);
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+
+    // Ample padding: left 140px ensures '2021학년도' badge & starting dots are 100% visible
+    const padding = { top: 40, right: 190, bottom: 60, left: 140 };
+
+    const chartW = viewBoxWidth - padding.left - padding.right;
+    const chartH = viewBoxHeight - padding.top - padding.bottom;
+
+    const years = ADMISSIONS_DATA.years; // ['2021', '2022', '2023', '2024', '2025', '2026']
     const xStep = chartW / (years.length - 1);
     const maxRank = 39;
     const getY = (rank) => padding.top + ((rank - 1) / (maxRank - 1)) * chartH;
@@ -316,23 +319,24 @@ document.addEventListener('DOMContentLoaded', () => {
       depts = depts.filter(d => d.name.toLowerCase().includes(searchKeyword));
     }
 
-    // Grid lines and Wide Single-line Pill Badges
+    // Grid lines & Single-line Year Badges
     years.forEach((yr, idx) => {
       const x = padding.left + idx * xStep;
 
+      // Vertical dashed line
       const vLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       vLine.setAttribute('x1', x);
       vLine.setAttribute('y1', padding.top);
       vLine.setAttribute('x2', x);
-      vLine.setAttribute('y2', height - padding.bottom);
+      vLine.setAttribute('y2', viewBoxHeight - padding.bottom);
       vLine.setAttribute('stroke', '#EEF1E8');
       vLine.setAttribute('stroke-dasharray', '4');
       svg.appendChild(vLine);
 
-      // Wide Pill Badge (Guarantees Single-Line "2021학년도")
-      const badgeWidth = isModal ? 120 : 110;
+      // Pill Badge (2021학년도 ~ 2026학년도)
+      const badgeWidth = 110;
       const badgeHeight = 28;
-      const badgeY = height - padding.bottom + 14;
+      const badgeY = viewBoxHeight - padding.bottom + 14;
 
       const badgeRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       badgeRect.setAttribute('x', x - badgeWidth / 2);
@@ -349,14 +353,14 @@ document.addEventListener('DOMContentLoaded', () => {
       text.setAttribute('y', badgeY + 18);
       text.setAttribute('text-anchor', 'middle');
       text.setAttribute('fill', '#FFFFFF');
-      text.setAttribute('font-size', isModal ? '13' : '12');
+      text.setAttribute('font-size', '12');
       text.setAttribute('font-weight', '700');
       text.setAttribute('letter-spacing', '-0.2px');
       text.textContent = `${yr}학년도`;
       svg.appendChild(text);
     });
 
-    // Draw Lines & Dots
+    // Draw Lines & Dots for each department
     depts.forEach(dept => {
       const points = [];
       years.forEach((yr, idx) => {
@@ -385,32 +389,30 @@ document.addEventListener('DOMContentLoaded', () => {
       path.setAttribute('d', pathD);
       path.setAttribute('fill', 'none');
       path.setAttribute('stroke', isSelected ? '#33412B' : catColor);
-      path.setAttribute('stroke-width', isSelected ? (isModal ? '5' : '4') : (isModal ? '2.2' : '1.8'));
-      path.setAttribute('opacity', isSelected ? '1' : (activeDeptId ? '0.3' : '0.85'));
+      path.setAttribute('stroke-width', isSelected ? '3.5' : '1.2');
+      path.setAttribute('opacity', isSelected ? '1' : (activeDeptId ? '0.2' : '0.45'));
       path.setAttribute('cursor', 'pointer');
 
       path.addEventListener('click', () => {
-        activeDeptId = dept.id;
+        activeDeptId = isSelected ? null : dept.id;
         drawBumpChart();
         highlightTableRow(dept.id);
       });
 
       svg.appendChild(path);
 
+      // Dots on each year
       points.forEach(pt => {
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cx', pt.x);
         circle.setAttribute('cy', pt.y);
-        circle.setAttribute('r', isSelected ? (isModal ? '6' : '5') : (isModal ? '4' : '3'));
+        circle.setAttribute('r', isSelected ? '4.5' : '2.5');
         circle.setAttribute('fill', isSelected ? '#33412B' : catColor);
-        circle.setAttribute('opacity', isSelected ? '1' : '0.7');
-
-        const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-        title.textContent = `${dept.name} (${pt.year}): ${pt.rank}위`;
-        circle.appendChild(title);
+        circle.setAttribute('opacity', isSelected ? '1' : (activeDeptId ? '0.25' : '0.6'));
+        circle.setAttribute('cursor', 'pointer');
 
         circle.addEventListener('click', () => {
-          activeDeptId = dept.id;
+          activeDeptId = isSelected ? null : dept.id;
           drawBumpChart();
           highlightTableRow(dept.id);
         });
@@ -418,6 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
         svg.appendChild(circle);
       });
 
+      // Label at 2026학년도 (Rightmost point)
       const lastPt = points[points.length - 1];
       const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       labelText.setAttribute('x', lastPt.x + 8);
