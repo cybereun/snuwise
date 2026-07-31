@@ -291,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!svg) return;
 
     svg.innerHTML = '';
+    const isModal = svgId === 'modal-bump-chart-svg';
 
     // Fixed internal SVG viewBox coordinate system for 100% crisp & accurate scaling
     const viewBoxWidth = 1200;
