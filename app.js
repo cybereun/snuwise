@@ -293,10 +293,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const height = svg.clientHeight || 400;
     const isModal = svgId === 'modal-bump-chart-svg';
     
-    // Ample padding for single line wide badges
+    // Ample padding for single line wide badges (Left padding 100px prevents 2021학년도 badge clipping)
     const padding = isModal 
-      ? { top: 40, right: 180, bottom: 58, left: 60 }
-      : { top: 30, right: 140, bottom: 58, left: 50 };
+      ? { top: 40, right: 210, bottom: 60, left: 100 }
+      : { top: 30, right: 160, bottom: 60, left: 85 };
 
     const chartW = width - padding.left - padding.right;
     const chartH = height - padding.top - padding.bottom;
