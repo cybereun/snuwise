@@ -884,11 +884,18 @@ body {
    A4 Official Print Document Styling (@media print)
    ========================================================================== */
 @media print {
+  @page {
+    margin: 0;
+    size: A4 portrait;
+  }
+
   body {
     background-color: #FFFFFF !important;
     color: #000000 !important;
     height: auto !important;
     overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   #app-container, .modal-overlay, .mobile-bottom-nav, .sidebar-backdrop {
