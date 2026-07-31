@@ -478,6 +478,25 @@ body {
   overflow: hidden;
 }
 
+/* Print Setup Modal Centered Form Styling */
+#print-setup-modal {
+  align-items: center;
+  justify-content: center;
+  z-index: 2500;
+}
+
+#print-setup-modal .modal-content {
+  width: 92%;
+  max-width: 660px;
+  height: auto;
+  max-height: 88vh;
+  margin: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 48px rgba(34, 41, 29, 0.18);
+  padding: 28px 32px;
+  overflow-y: auto;
+}
+
 .modal-header {
   display: flex;
   align-items: center;
