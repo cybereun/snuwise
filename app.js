@@ -334,9 +334,9 @@ document.addEventListener('DOMContentLoaded', () => {
       vLine.setAttribute('stroke-dasharray', '4');
       svg.appendChild(vLine);
 
-      // Pill Badge (2021학년도 ~ 2026학년도)
-      const badgeWidth = 110;
-      const badgeHeight = 28;
+      // Slimmer Pill Badge (badgeWidth 88px guarantees no left edge clipping)
+      const badgeWidth = 88;
+      const badgeHeight = 24;
       const badgeY = viewBoxHeight - padding.bottom + 14;
 
       const badgeRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -344,19 +344,19 @@ document.addEventListener('DOMContentLoaded', () => {
       badgeRect.setAttribute('y', badgeY);
       badgeRect.setAttribute('width', badgeWidth);
       badgeRect.setAttribute('height', badgeHeight);
-      badgeRect.setAttribute('rx', '14');
-      badgeRect.setAttribute('ry', '14');
+      badgeRect.setAttribute('rx', '12');
+      badgeRect.setAttribute('ry', '12');
       badgeRect.setAttribute('fill', '#33412B');
       svg.appendChild(badgeRect);
 
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('x', x);
-      text.setAttribute('y', badgeY + 18);
+      text.setAttribute('y', badgeY + 16);
       text.setAttribute('text-anchor', 'middle');
       text.setAttribute('fill', '#FFFFFF');
-      text.setAttribute('font-size', '12');
+      text.setAttribute('font-size', '11.5');
       text.setAttribute('font-weight', '700');
-      text.setAttribute('letter-spacing', '-0.2px');
+      text.setAttribute('letter-spacing', '-0.3px');
       text.textContent = `${yr}학년도`;
       svg.appendChild(text);
     });
