@@ -1,0 +1,18 @@
+{
+  "name": "서울대 정시 입시 컨설팅 종합 플랫폼 (SNU-Wise)",
+  "short_name": "SNU-Wise",
+  "description": "서울대학교 최근 6개년 정시 입결 및 어디가 공식 데이터 종합 분석 플랫폼",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F7F8F3",
+  "theme_color": "#7D8F62",
+  "icons": [
+    {
+      "src": "snuwise_icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
