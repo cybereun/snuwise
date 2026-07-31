@@ -41,11 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function initVisitorCounter() {
     const elToday = document.getElementById('today-visits');
     const elTotal = document.getElementById('total-visits');
+    if (!elToday || !elTotal) return;
 
     const todayStr = new Date().toISOString().slice(0, 10);
     let lastDate = localStorage.getItem('snuwise_last_date');
     let todayVisits = parseInt(localStorage.getItem('snuwise_today_visits')) || 14;
-    let totalVisits = parseInt(localStorage.getItem('snuwise_total_visits')) || 1285;
+    let localTotal = parseInt(localStorage.getItem('snuwise_total_visits')) || 1285;
 
     if (lastDate !== todayStr) {
       todayVisits = 1;
@@ -53,12 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       todayVisits += 1;
     }
-    totalVisits += 1;
-
     localStorage.setItem('snuwise_today_visits', todayVisits);
-    localStorage.setItem('snuwise_total_visits', totalVisits);
 
-    // Smooth Count Up Animation
     const animateCount = (el, target) => {
       if (!el) return;
       let start = Math.max(0, target - 20);
@@ -72,8 +69,27 @@ document.addEventListener('DOMContentLoaded', () => {
       step();
     };
 
-    if (elToday) animateCount(elToday, todayVisits);
-    if (elTotal) animateCount(elTotal, totalVisits);
+    // Render Today visits
+    animateCount(elToday, todayVisits);
+
+    // Global Cross-Device Shared Counter API
+    const namespace = 'snuwise_natural_app_2026';
+    const key = 'shared_total_visits';
+    const initialBase = 1285;
+
+    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+      .then(res => res.json())
+      .then(data => {
+        let realTotal = initialBase + (parseInt(data.value) || 1);
+        localStorage.setItem('snuwise_total_visits', realTotal);
+        animateCount(elTotal, realTotal);
+      })
+      .catch(() => {
+        // Fallback for offline environments
+        localTotal += 1;
+        localStorage.setItem('snuwise_total_visits', localTotal);
+        animateCount(elTotal, localTotal);
+      });
   }
 
   /* ==========================================================================
