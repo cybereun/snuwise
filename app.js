@@ -293,19 +293,31 @@ document.addEventListener('DOMContentLoaded', () => {
     svg.innerHTML = '';
     const isModal = svgId === 'modal-bump-chart-svg';
 
-    // Fixed internal SVG viewBox coordinate system for 100% crisp & accurate scaling
-    const viewBoxWidth = 1200;
-    const viewBoxHeight = 560;
+    let width, height, padding;
 
-    svg.setAttribute('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`);
-    svg.setAttribute('width', '100%');
-    svg.setAttribute('height', '100%');
+    if (isModal) {
+      // ⚠️ DO NOT MODIFY MODAL CHART: Kept 100% untouched as requested
+      const viewBoxWidth = 1200;
+      const viewBoxHeight = 560;
+      svg.setAttribute('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`);
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', '100%');
 
-    // Ample padding: left 140px ensures '2021학년도' badge & starting dots are 100% visible
-    const padding = { top: 40, right: 190, bottom: 60, left: 140 };
+      width = viewBoxWidth;
+      height = viewBoxHeight;
+      padding = { top: 40, right: 190, bottom: 60, left: 140 };
+    } else {
+      // Main Dashboard Chart: Fills container card width 100% dynamically
+      svg.removeAttribute('viewBox');
+      width = svg.clientWidth || 1000;
+      height = svg.clientHeight || 400;
+      svg.setAttribute('width', width);
+      svg.setAttribute('height', height);
+      padding = { top: 30, right: 140, bottom: 50, left: 60 };
+    }
 
-    const chartW = viewBoxWidth - padding.left - padding.right;
-    const chartH = viewBoxHeight - padding.top - padding.bottom;
+    const chartW = width - padding.left - padding.right;
+    const chartH = height - padding.top - padding.bottom;
 
     const years = ADMISSIONS_DATA.years; // ['2021', '2022', '2023', '2024', '2025', '2026']
     const xStep = chartW / (years.length - 1);
@@ -329,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
       vLine.setAttribute('x1', x);
       vLine.setAttribute('y1', padding.top);
       vLine.setAttribute('x2', x);
-      vLine.setAttribute('y2', viewBoxHeight - padding.bottom);
+      vLine.setAttribute('y2', height - padding.bottom);
       vLine.setAttribute('stroke', '#EEF1E8');
       vLine.setAttribute('stroke-dasharray', '4');
       svg.appendChild(vLine);
@@ -337,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Slimmer Pill Badge (badgeWidth 88px guarantees no left edge clipping)
       const badgeWidth = 88;
       const badgeHeight = 24;
-      const badgeY = viewBoxHeight - padding.bottom + 14;
+      const badgeY = height - padding.bottom + 14;
 
       const badgeRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       badgeRect.setAttribute('x', x - badgeWidth / 2);
