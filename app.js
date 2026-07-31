@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function initVisitorCounter() {
     const elToday = document.getElementById('today-visits');
     const elTotal = document.getElementById('total-visits');
-    const elHdrTotal = document.getElementById('hdr-total-visits');
 
     const todayStr = new Date().toISOString().slice(0, 10);
     let lastDate = localStorage.getItem('snuwise_last_date');
@@ -75,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (elToday) animateCount(elToday, todayVisits);
     if (elTotal) animateCount(elTotal, totalVisits);
-    if (elHdrTotal) animateCount(elHdrTotal, totalVisits);
   }
 
   /* ==========================================================================
