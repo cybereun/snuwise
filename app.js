@@ -214,6 +214,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Hide search box ONLY in 2nd ('calc') and 5th ('strategy') tabs
+    const searchBox = document.querySelector('.search-box');
+    if (searchBox) {
+      if (tab === 'calc' || tab === 'strategy') {
+        searchBox.classList.add('hide-search');
+      } else {
+        searchBox.classList.remove('hide-search');
+      }
+    }
+
     if (tab === 'trend') {
       headerTitle.textContent = '6개년 입결 트렌드 분석';
       headerDesc.textContent = '2021~2026학년도 학과별 70% Cut 순위 변동 궤적 및 시각화 솔루션';

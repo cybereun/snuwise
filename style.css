@@ -224,6 +224,10 @@ body {
   position: relative;
 }
 
+.search-box.hide-search {
+  display: none !important;
+}
+
 .search-box input {
   background-color: var(--bg-card);
   border: 1px solid var(--border-light);
