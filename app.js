@@ -288,8 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (tab === 'trend') {
-      headerTitle.textContent = '6개년 입결 트렌드 분석';
-      headerDesc.textContent = '2021~2026학년도 학과별 70% Cut 순위 변동 궤적 및 시각화 솔루션';
+      headerTitle.textContent = '자연계 6개년 입결 트렌드 분석';
+      headerDesc.textContent = '2021~2026학년도 서울대 자연계 39개 학과별 70% Cut 순위 변동 궤적 시각화';
     } else if (tab === 'calc') {
       headerTitle.textContent = '정시 점수 진단 & 교과평가 계산기';
       headerDesc.textContent = '서울대 정시 수능 환산식, 과탐Ⅱ 가산점(+3점/5점), 교과평가(A.A~C.C) 정밀 진단';
