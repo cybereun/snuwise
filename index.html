@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서울대 정시 입시 컨설팅 종합 플랫폼 (SNU-Wise)</title>
+  
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app-container">
+    <!-- Left Minimal Sidebar (No Teacher/Parent terms) -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <div>
+          <span class="brand-title">SNU-Wise</span>
+          <span class="brand-subtitle">서울대 정시 종합 플랫폼</span>
+        </div>
+      </div>
+
+      <ul class="nav-menu">
+        <li>
+          <a class="nav-item active" data-tab="trend">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path></svg>
+            <span>📊 6개년 입결 트렌드</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-tab="calc">
+            <svg class="nav-icon" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"></path></svg>
+            <span>🧮 정시 점수 진단 & 교과</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-tab="balance">
+            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg>
+            <span>🔄 충원율 & 백분위 밸런스</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-tab="compare-types">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M16 3h5v5"></path><path d="M8 21H3v-5"></path><path d="M21 3l-7 7"></path><path d="M3 21l7-7"></path></svg>
+            <span>⚖️ 일반 vs 지균 전형 비교</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-tab="strategy">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span>💡 입시 전략 & Tier 리포트</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <p><strong>서울대학교 자연계열</strong></p>
+        <p>2026/2027 어디가 공식 데이터 연동</p>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <button class="btn-icon mobile-only" id="btn-mobile-menu" title="메뉴 열기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+
+        <div class="header-title-group">
+          <h1 id="header-tab-title">6개년 입결 트렌드 분석</h1>
+          <p id="header-tab-desc">2021~2026학년도 학과별 70% Cut 순위 변동 궤적 및 시각화 솔루션</p>
+        </div>
+
+        <div class="header-actions">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="global-search" placeholder="학과명 검색 (예: 컴퓨터, 수리)">
+          </div>
+          <button class="btn-minimal desktop-only" id="btn-print-report">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            리포트 인쇄
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable View Container -->
+      <div class="view-container">
+
+        <!-- ================= TAB 1: 6개년 입결 트렌드 ================= -->
+        <section id="tab-trend" class="tab-pane active">
+          <!-- 4 Stat Summary Cards -->
+          <div class="stat-cards-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <span>분석 대상 학과</span>
+                <div class="stat-icon">🎓</div>
+              </div>
+              <div class="stat-value">39개 학과</div>
+              <div class="stat-subtext">서울대 자연계 6개년 집계</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span>최고 인기 유지 학과</span>
+                <div class="stat-icon">👑</div>
+              </div>
+              <div class="stat-value">의예 / 치의예</div>
+              <div class="stat-subtext">6년 연속 1위 · 2위 고정</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span>최고 상승세 학과</span>
+                <div class="stat-icon">📈</div>
+              </div>
+              <div class="stat-value">수리과학부</div>
+              <div class="stat-subtext">25위 (2021) ➔ 3위 (2026)</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span>추합률 최고 학과</span>
+                <div class="stat-icon">🔄</div>
+              </div>
+              <div class="stat-value">수리과학부 (55.6%)</div>
+              <div class="stat-subtext">모집 9명 중 5명 추가합격</div>
+            </div>
+          </div>
+
+          <!-- Main Grid: Chart Panel -->
+          <div class="card-panel">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">6개년 70% Cut 순위 흐름 시각화</h3>
+                <p class="card-subtitle">클릭하여 학과 궤적 하이라이트 (1위가 최상위)</p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="filter-group" id="category-filter">
+                  <button class="chip-btn active" data-cat="ALL">전체</button>
+                  <button class="chip-btn" data-cat="MED">의약학</button>
+                  <button class="chip-btn" data-cat="BASIC">기초자연</button>
+                  <button class="chip-btn" data-cat="ENG">공학</button>
+                  <button class="chip-btn" data-cat="BIO_AGRIC">농생대</button>
+                  <button class="chip-btn" data-cat="EDU">사범대</button>
+                </div>
+                <button class="btn-icon" id="btn-expand-chart" title="전체화면 확대 탐색">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- SVG Interactive Bump Chart -->
+            <div class="chart-container" id="bump-chart-box">
+              <svg id="bump-chart-svg" class="bump-chart-svg"></svg>
+            </div>
+          </div>
+
+          <!-- Bottom: Full Table -->
+          <div class="card-panel">
+            <div class="card-header">
+              <h3 class="card-title">학과별 6개년 입결 & 2026 어디가 70% Cut 분석 표</h3>
+            </div>
+            <div class="minimal-table-container">
+              <table class="minimal-table" id="teacher-main-table">
+                <thead>
+                  <tr>
+                    <th>학과명</th>
+                    <th>계열</th>
+                    <th>21'</th>
+                    <th>22'</th>
+                    <th>23'</th>
+                    <th>24'</th>
+                    <th>25'</th>
+                    <th>26'</th>
+                    <th>26' 70% 환산점수</th>
+                    <th>26' 평균백분위</th>
+                    <th>추합률 (%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= TAB 2: 정시 점수 진단 & 교과평가 (1번 + 5번) ================= -->
+        <section id="tab-calc" class="tab-pane">
+          <div class="dashboard-grid">
+            <!-- Left: Score Input Form -->
+            <div class="card-panel">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">🧮 서울대 정시 환산점수 & 과탐 Ⅱ 가산점 정밀 산출기</h3>
+                  <p class="card-subtitle">수능 영역별 표준점수 및 과탐 조합, 교과평가 등급 입력</p>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                <div class="form-group">
+                  <label>국어 표준점수 (1.0배)</label>
+                  <input type="number" id="calc-kor-std" class="form-control" value="134" placeholder="예: 134">
+                </div>
+                <div class="form-group">
+                  <label>수학 표준점수 (1.2배)</label>
+                  <input type="number" id="calc-math-std" class="form-control" value="142" placeholder="예: 142">
+                </div>
+                <div class="form-group">
+                  <label>탐구1 표준점수 (0.8배 합산)</label>
+                  <input type="number" id="calc-tam1-std" class="form-control" value="68" placeholder="예: 68">
+                </div>
+                <div class="form-group">
+                  <label>탐구2 표준점수 (0.8배 합산)</label>
+                  <input type="number" id="calc-tam2-std" class="form-control" value="66" placeholder="예: 66">
+                </div>
+                <div class="form-group">
+                  <label>영어 등급 (감점)</label>
+                  <select id="calc-eng-grade" class="form-control">
+                    <option value="1">1등급 (0점 감점)</option>
+                    <option value="2" selected>2등급 (-0.5점 감점)</option>
+                    <option value="3">3등급 (-2.0점 감점)</option>
+                    <option value="4">4등급 (-4.0점 감점)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>한국사 등급 (감점)</label>
+                  <select id="calc-history-grade" class="form-control">
+                    <option value="1" selected>1~3등급 (0점 감점)</option>
+                    <option value="4">4등급 (-0.4점 감점)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>🧪 과탐 응시 조합 (조정 가산점)</label>
+                  <select id="calc-tam-combo" class="form-control">
+                    <option value="I_I">Ⅰ + Ⅰ (가산점 없음)</option>
+                    <option value="I_II" selected>Ⅰ + Ⅱ (+3.0점 가산점)</option>
+                    <option value="II_II">Ⅱ + Ⅱ (+5.0점 가산점)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>🏫 정시 교과평가 등급 조합 (일반전형)</label>
+                  <select id="calc-eval-grade" class="form-control">
+                    <option value="AA">A · A 조합 (5.0점 + 기본15 = 20.0점)</option>
+                    <option value="AB" selected>A · B 조합 (4.0점 + 기본15 = 19.0점)</option>
+                    <option value="BB">B · B 조합 (3.0점 + 기본15 = 18.0점)</option>
+                    <option value="BC">B · C 조합 (1.5점 + 기본15 = 16.5점)</option>
+                    <option value="CC">C · C 조합 (0.0점 + 기본15 = 15.0점)</option>
+                  </select>
+                </div>
+              </div>
+
+              <button class="btn-primary" id="btn-calculate-score" style="width: 100%; margin-top: 20px; padding: 12px;">실제 환산점수 산출 및 2026 입결 진단</button>
+            </div>
+
+            <!-- Right: Score Result & Match Grid -->
+            <div class="card-panel">
+              <div class="card-header">
+                <h3 class="card-title">🎯 서울대 정시 환산 결과 및 진단</h3>
+              </div>
+
+              <div id="calc-score-display" style="background-color: var(--primary-tint); padding: 16px; border-radius: var(--radius-md); text-align: center; margin-bottom: 16px;">
+                <div style="font-size: 13px; color: var(--text-sub);">내 예상 최종 환산 총점 (수능 80 + 교과 20)</div>
+                <div id="calc-final-score" style="font-size: 32px; font-weight: 800; color: var(--primary-dark); margin: 4px 0;">404.70 점</div>
+                <div id="calc-breakdown-score" style="font-size: 12px; color: var(--text-sub);">수능 환산: 385.70점 | 교과평가: 19.0점 (A·B) | 과탐 Ⅱ 가산: +3.0점</div>
+              </div>
+
+              <div id="calc-matched-depts">
+                <!-- Rendered dynamically via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= TAB 3: 충원율 & 백분위 밸런스 (3번 + 4번) ================= -->
+        <section id="tab-balance" class="tab-pane">
+          <div class="dashboard-grid">
+            <!-- Left: Radar / Bar Chart Viewer -->
+            <div class="card-panel">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">🕸️ 학과별 영역별(국/수/탐1/탐2) 70% Cut 백분위 밸런스</h3>
+                  <p class="card-subtitle">선택한 학과의 과목별 백분위 프로필 및 펑크 지점 탐지</p>
+                </div>
+                <div class="form-group" style="width: 200px;">
+                  <select id="balance-dept-select" class="form-control"></select>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 24px; align-items: center;">
+                <div style="width: 320px; height: 300px; position: relative;">
+                  <svg id="radar-chart-svg" style="width:100%; height:100%;"></svg>
+                </div>
+                <div id="balance-detail-box" style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+                  <!-- Rendered via JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Additional Rate (추합 회전율) Top Ranking -->
+            <div class="card-panel">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">🔄 2026학년도 추가합격 회전율(추합률) TOP 학과</h3>
+                  <p class="card-subtitle">모집인원 대비 충원 인원 비율 (이탈률)</p>
+                </div>
+              </div>
+
+              <div id="additional-rate-list" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= TAB 4: 일반 vs 지균 전형 비교 (2번) ================= -->
+        <section id="tab-compare-types" class="tab-pane">
+          <div class="card-panel">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">⚖️ 2026학년도 일반전형 vs 지역균형전형 1:1 입결 & 경쟁률 정밀 비교</h3>
+                <p class="card-subtitle">2026학년도 대학정보포털 어디가 공식 결과 기준 동일 모집단위 전형별 1:1 비교</p>
+              </div>
+            </div>
+
+            <div class="minimal-table-container">
+              <table class="minimal-table" id="type-compare-table">
+                <thead>
+                  <tr>
+                    <th>모집단위</th>
+                    <th>전형 구분</th>
+                    <th>모집인원</th>
+                    <th>경쟁률</th>
+                    <th>충원인원 (추합률)</th>
+                    <th>50% Cut 환산점수</th>
+                    <th>70% Cut 환산점수</th>
+                    <th>수능 70% 평균백분위</th>
+                    <th>교과평가 반영비율</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= TAB 5: 입시 전략 & Tier 리포트 ================= -->
+        <section id="tab-strategy" class="tab-pane">
+          <!-- Parent Card News Stories -->
+          <div class="card-panel">
+            <div class="card-header">
+              <h3 class="card-title">💡 서울대 정시 입시 3대 핵심 분석 스토리</h3>
+            </div>
+
+            <div class="story-grid">
+              <div class="story-card">
+                <span class="story-tag">트렌드 1</span>
+                <h4 class="story-title">의대 광풍 속 '수리과학·통계'의 대폭등</h4>
+                <p class="story-desc">
+                  2026년 기준 <strong>수리과학부(3위, 환산 413.0점)</strong>, <strong>통계학과(4위, 환산 412.2점)</strong>가 최상위권으로 치솟았습니다. AI 및 데이터 과학 선호와 의대 복수합격 이탈(수리과학 추합률 55.6%)이 주요 원인입니다.
+                </p>
+              </div>
+
+              <div class="story-card">
+                <span class="story-tag">트렌드 2</span>
+                <h4 class="story-title">컴퓨터공학부 14위? 입결 컷의 '착시'</h4>
+                <p class="story-desc">
+                  컴공의 70% Cut 환산점수는 403.9점으로 14위를 기록했으나, 이는 탐구2 과목의 백분위 74% 지원자 포함 영향입니다. 50% Cut(406.9점)은 여전히 최상위권입니다.
+                </p>
+              </div>
+
+              <div class="story-card">
+                <span class="story-tag">트렌드 3</span>
+                <h4 class="story-title">첨단융합학부 신설과 공대 순위 재편</h4>
+                <p class="story-desc">
+                  첨단융합학부 일반전형(70% cut 403.0점, 17위) 및 지균전형(70% cut 400.9점)이 선발되며 기존 기계공학, 재료공학, 화학생물공학과 등의 순위 구간에 영향을 미쳤습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tier Grouping Guide -->
+          <div class="card-panel">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">📊 서울대 자연계 5대 지원 Tier 그룹 가이드</h3>
+                <p class="card-subtitle">2026 어디가 70% Cut 환산점수 및 백분위 기준 5개 그룹 지원 전략</p>
+              </div>
+            </div>
+
+            <div class="tier-grid" id="tier-guide-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile Sidebar Overlay Backdrop -->
+  <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+  <!-- Mobile Bottom Fixed Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <a class="mobile-nav-item active" data-tab="trend">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path></svg>
+      <span>트렌드</span>
+    </a>
+    <a class="mobile-nav-item" data-tab="calc">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line></svg>
+      <span>점수진단</span>
+    </a>
+    <a class="mobile-nav-item" data-tab="balance">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg>
+      <span>충원/밸런스</span>
+    </a>
+    <a class="mobile-nav-item" data-tab="compare-types">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24"><path d="M16 3h5v5"></path><path d="M8 21H3v-5"></path></svg>
+      <span>전형비교</span>
+    </a>
+    <a class="mobile-nav-item" data-tab="strategy">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+      <span>전략/Tier</span>
+    </a>
+  </nav>
+
+  <!-- Fullscreen Chart Modal Overlay -->
+  <div id="chart-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">📈 서울대 6개년 정시 입결 70% Cut 흐름 전체화면 시각화</h2>
+          <p class="modal-subtitle">클릭하여 학과 궤적 하이라이트 및 학년도별 입결 순위 정밀 비교 (1위가 최상위)</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div class="filter-group" id="modal-category-filter">
+            <button class="chip-btn active" data-cat="ALL">전체</button>
+            <button class="chip-btn" data-cat="MED">의약학</button>
+            <button class="chip-btn" data-cat="BASIC">기초자연</button>
+            <button class="chip-btn" data-cat="ENG">공학</button>
+            <button class="chip-btn" data-cat="BIO_AGRIC">농생대</button>
+            <button class="chip-btn" data-cat="EDU">사범대</button>
+          </div>
+          <button class="btn-icon btn-close-modal" id="btn-close-chart-modal" title="닫기 (ESC)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-chart-container">
+          <svg id="modal-bump-chart-svg" class="bump-chart-svg"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
