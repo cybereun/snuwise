@@ -373,6 +373,21 @@ document.addEventListener('DOMContentLoaded', () => {
       svg.appendChild(text);
     });
 
+    // Find department with maximum 6-year rank volatility (max - min) in selected group
+    let maxVolatilityDeptId = null;
+    let maxDiff = -1;
+
+    depts.forEach(dept => {
+      const validRanks = Object.values(dept.ranks).filter(r => r !== null && r !== undefined);
+      if (validRanks.length >= 2) {
+        const diff = Math.max(...validRanks) - Math.min(...validRanks);
+        if (diff > maxDiff) {
+          maxDiff = diff;
+          maxVolatilityDeptId = dept.id;
+        }
+      }
+    });
+
     // Draw Lines & Dots for each department
     depts.forEach(dept => {
       const points = [];
@@ -388,7 +403,25 @@ document.addEventListener('DOMContentLoaded', () => {
       if (points.length < 2) return;
 
       const isSelected = dept.id === activeDeptId;
+      const isMostVolatile = dept.id === maxVolatilityDeptId && maxDiff > 0;
       const catColor = ADMISSIONS_DATA.categories[dept.category]?.color || '#7D8F62';
+
+      let strokeColor = catColor;
+      let strokeWidth = isModal ? '1.8' : '1.5';
+      let opacity = activeDeptId ? '0.2' : '0.45';
+
+      // 🔴 RED highlight for the department with maximum rank fluctuation in the group
+      if (isMostVolatile) {
+        strokeColor = '#E53935';
+        strokeWidth = isModal ? '3.5' : '3.0';
+        opacity = '0.95';
+      }
+
+      if (isSelected) {
+        strokeColor = '#33412B';
+        strokeWidth = isModal ? '4.5' : '3.8';
+        opacity = '1.0';
+      }
 
       let pathD = `M ${points[0].x} ${points[0].y}`;
       for (let i = 1; i < points.length; i++) {
@@ -401,9 +434,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', pathD);
       path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', isSelected ? '#33412B' : catColor);
-      path.setAttribute('stroke-width', isSelected ? '3.5' : '1.2');
-      path.setAttribute('opacity', isSelected ? '1' : (activeDeptId ? '0.2' : '0.45'));
+      path.setAttribute('stroke', strokeColor);
+      path.setAttribute('stroke-width', strokeWidth);
+      path.setAttribute('opacity', opacity);
       path.setAttribute('cursor', 'pointer');
 
       path.addEventListener('click', () => {
@@ -419,9 +452,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cx', pt.x);
         circle.setAttribute('cy', pt.y);
-        circle.setAttribute('r', isSelected ? '4.5' : '2.5');
-        circle.setAttribute('fill', isSelected ? '#33412B' : catColor);
-        circle.setAttribute('opacity', isSelected ? '1' : (activeDeptId ? '0.25' : '0.6'));
+        circle.setAttribute('r', isSelected ? '4.5' : (isMostVolatile ? '4' : '2.5'));
+        circle.setAttribute('fill', strokeColor);
+        circle.setAttribute('opacity', opacity);
         circle.setAttribute('cursor', 'pointer');
 
         circle.addEventListener('click', () => {
@@ -435,22 +468,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Label at 2026학년도 (Rightmost point)
       const lastPt = points[points.length - 1];
-      const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      labelText.setAttribute('x', lastPt.x + 8);
-      labelText.setAttribute('y', lastPt.y + 4);
-      labelText.setAttribute('fill', isSelected ? '#33412B' : catColor);
-      labelText.setAttribute('font-size', isSelected ? (isModal ? '14' : '12') : (isModal ? '12' : '11'));
-      labelText.setAttribute('font-weight', isSelected ? '700' : '500');
-      labelText.setAttribute('cursor', 'pointer');
-      labelText.textContent = `${dept.name} (${lastPt.rank}위)`;
+      if (lastPt && lastPt.year === '2026') {
+        const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        labelText.setAttribute('x', lastPt.x + 8);
+        labelText.setAttribute('y', lastPt.y + 4);
+        labelText.setAttribute('fill', isMostVolatile ? '#E53935' : (isSelected ? '#33412B' : catColor));
+        labelText.setAttribute('font-size', isSelected || isMostVolatile ? (isModal ? '13' : '12') : (isModal ? '11.5' : '10.5'));
+        labelText.setAttribute('font-weight', isSelected || isMostVolatile ? '700' : '500');
+        labelText.setAttribute('cursor', 'pointer');
 
-      labelText.addEventListener('click', () => {
-        activeDeptId = dept.id;
-        drawBumpChart();
-        highlightTableRow(dept.id);
-      });
+        const suffix = isMostVolatile ? ` 🔥최고변동 (+${maxDiff}위)` : '';
+        labelText.textContent = `${dept.name} (${lastPt.rank}위)${suffix}`;
 
-      svg.appendChild(labelText);
+        labelText.addEventListener('click', () => {
+          activeDeptId = isSelected ? null : dept.id;
+          drawBumpChart();
+          highlightTableRow(dept.id);
+        });
+
+        svg.appendChild(labelText);
+      }
     });
   }
 
