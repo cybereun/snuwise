@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function initVisitorCounter() {
     const elToday = document.getElementById('today-visits');
     const elTotal = document.getElementById('total-visits');
-    if (!elToday || !elTotal) return;
+    const elHdrTotal = document.getElementById('hdr-total-visits');
 
     const todayStr = new Date().toISOString().slice(0, 10);
     let lastDate = localStorage.getItem('snuwise_last_date');
@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Smooth Count Up Animation
     const animateCount = (el, target) => {
+      if (!el) return;
       let start = Math.max(0, target - 20);
       const step = () => {
         start += 1;
@@ -72,8 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
       step();
     };
 
-    animateCount(elToday, todayVisits);
-    animateCount(elTotal, totalVisits);
+    if (elToday) animateCount(elToday, todayVisits);
+    if (elTotal) animateCount(elTotal, totalVisits);
+    if (elHdrTotal) animateCount(elHdrTotal, totalVisits);
   }
 
   /* ==========================================================================
