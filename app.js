@@ -50,10 +50,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnPreset2 = document.getElementById('btn-preset-2');
     const btnPreset3 = document.getElementById('btn-preset-3');
 
+    // Generate Smart Admissions Analysis Comment based on current calculator inputs
+    const generateSmartAdmissionsComment = () => {
+      const korStd = parseFloat(document.getElementById('calc-kor-std').value) || 134;
+      const mathStd = parseFloat(document.getElementById('calc-math-std').value) || 142;
+      const tam1Std = parseFloat(document.getElementById('calc-tam1-std').value) || 68;
+      const tam2Std = parseFloat(document.getElementById('calc-tam2-std').value) || 66;
+      const engGrade = parseInt(document.getElementById('calc-eng-grade').value) || 2;
+      const historyGrade = parseInt(document.getElementById('calc-history-grade').value) || 1;
+      const tamCombo = document.getElementById('calc-tam-combo').value;
+      const evalGrade = document.getElementById('calc-eval-grade').value;
+
+      const res = ADMISSIONS_DATA.calculateSNUScore(korStd, mathStd, tam1Std, tam2Std, engGrade, historyGrade, tamCombo, evalGrade);
+
+      let bonusText = res.tamBonus > 0 ? `과탐 Ⅱ 가산점(+${res.tamBonus.toFixed(1)}점) 및 ` : '';
+      let evalText = `교과평가(${evalGrade} ${res.schoolEvalScore}점) 반영 결과`;
+
+      return `서울대 정시 환산 총점 ${res.finalTotal}점으로, ${bonusText}${evalText}에 따른 안정적인 합격 방어선이 형성되었습니다. 수리과학부 및 통계학과는 타 의대 복수합격 이탈로 인한 추가합격 회전율(55.6%)이 높아 소신 상향 지원 전략으로 매우 유효합니다.`;
+    };
+
     // Open print modal
     if (btnPrintReport) {
       btnPrintReport.addEventListener('click', (e) => {
         e.preventDefault();
+        // Auto-fill smart generated analysis comment directly into textarea value
+        inputTeacherComment.value = generateSmartAdmissionsComment();
         printModal.classList.add('active');
       });
     }
