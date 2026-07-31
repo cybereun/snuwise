@@ -439,6 +439,36 @@
     </a>
   </nav>
 
+  <!-- Fullscreen Chart Modal Overlay -->
+  <div id="chart-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">📈 서울대 6개년 정시 입결 70% Cut 흐름 전체화면 시각화</h2>
+          <p class="modal-subtitle">클릭하여 학과 궤적 하이라이트 및 학년도별 입결 순위 정밀 비교 (1위가 최상위)</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div class="filter-group" id="modal-category-filter">
+            <button class="chip-btn active" data-cat="ALL">전체</button>
+            <button class="chip-btn" data-cat="MED">의약학</button>
+            <button class="chip-btn" data-cat="BASIC">기초자연</button>
+            <button class="chip-btn" data-cat="ENG">공학</button>
+            <button class="chip-btn" data-cat="BIO_AGRIC">농생대</button>
+            <button class="chip-btn" data-cat="EDU">사범대</button>
+          </div>
+          <button class="btn-icon btn-close-modal" id="btn-close-chart-modal" title="닫기 (ESC)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-chart-container">
+          <svg id="modal-bump-chart-svg" class="bump-chart-svg"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Print Setup Modal Overlay -->
   <div id="print-setup-modal" class="modal-overlay">
     <div class="modal-content" style="max-width: 680px; height: auto; max-height: 90vh; overflow-y: auto;">
