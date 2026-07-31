@@ -526,6 +526,8 @@ body {
 
 .minimal-table-container {
   overflow-x: auto;
+  max-height: 480px;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -537,6 +539,9 @@ body {
 }
 
 .minimal-table th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
   background-color: var(--bg-sidebar);
   color: var(--text-sub);
   font-weight: 600;
