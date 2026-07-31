@@ -439,33 +439,160 @@
     </a>
   </nav>
 
-  <!-- Fullscreen Chart Modal Overlay -->
-  <div id="chart-modal" class="modal-overlay">
-    <div class="modal-content">
+  <!-- Print Setup Modal Overlay -->
+  <div id="print-setup-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 680px; height: auto; max-height: 90vh; overflow-y: auto;">
       <div class="modal-header">
         <div>
-          <h2 class="modal-title">📈 서울대 6개년 정시 입결 70% Cut 흐름 전체화면 시각화</h2>
-          <p class="modal-subtitle">클릭하여 학과 궤적 하이라이트 및 학년도별 입결 순위 정밀 비교 (1위가 최상위)</p>
+          <h2 class="modal-title">📑 A4 리포트 인쇄 간편 작성</h2>
+          <p class="modal-subtitle">학생/학부모에게 전달할 공식 서울대 정시 입시 컨설팅 보고서를 작성합니다.</p>
         </div>
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <div class="filter-group" id="modal-category-filter">
-            <button class="chip-btn active" data-cat="ALL">전체</button>
-            <button class="chip-btn" data-cat="MED">의약학</button>
-            <button class="chip-btn" data-cat="BASIC">기초자연</button>
-            <button class="chip-btn" data-cat="ENG">공학</button>
-            <button class="chip-btn" data-cat="BIO_AGRIC">농생대</button>
-            <button class="chip-btn" data-cat="EDU">사범대</button>
+        <button class="btn-icon btn-close-modal" id="btn-close-print-modal" title="닫기 (ESC)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="gap: 16px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label>학생 성명</label>
+            <input type="text" id="print-student-name" class="form-control" value="김서울" placeholder="예: 김서울 학생">
           </div>
-          <button class="btn-icon btn-close-modal" id="btn-close-chart-modal" title="닫기 (ESC)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
+          <div class="form-group">
+            <label>담당 교사명</label>
+            <input type="text" id="print-teacher-name" class="form-control" value="이진학" placeholder="예: 이진학 교사">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>💡 추천 소견 원클릭 삽입</label>
+          <div class="filter-group" style="margin-bottom: 6px;">
+            <button class="chip-btn" id="btn-preset-1">+ 수리과학부/통계학과 강세 소견</button>
+            <button class="chip-btn" id="btn-preset-2">+ 과탐Ⅱ 가산점 합격 안정 소견</button>
+            <button class="chip-btn" id="btn-preset-3">+ 컴공/전전 지원 전략 소견</button>
+          </div>
+          <textarea id="print-teacher-comment" class="form-control" rows="4" placeholder="학생 및 학부모에게 전달할 지도 총평 및 지원 전략 조언을 입력하세요.">수리과학부 및 통계학과는 타 의대 복수합격 이탈로 인한 추가합격 회전율(55.6%)이 높아 소신 상향 지원 시 유효한 전략 학과입니다. 과탐 Ⅱ 조합 (+3.0점 가산) 및 교과평가 (A·B 조합) 반영 시 최상위 컷 방어가 안정적입니다.</textarea>
+        </div>
+
+        <button class="btn-primary" id="btn-execute-print" style="padding: 12px; font-size: 14px; width: 100%;">🖨️ A4 진학 지도 보고서 인쇄 / PDF 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- A4 Print-Only Document Template -->
+  <div id="print-document" class="print-only-report">
+    <div class="print-header">
+      <div class="print-brand-group">
+        <img src="snuwise_icon.png" alt="SNU-Wise Logo" class="print-logo">
+        <div>
+          <h1 class="print-doc-title">2026학년도 서울대학교 정시 모집 진학 지도 리포트</h1>
+          <p class="print-doc-sub">SNU-Wise 입시 컨설팅 종합 플랫폼 공식 발급 서식</p>
         </div>
       </div>
-      <div class="modal-body">
-        <div class="modal-chart-container">
-          <svg id="modal-bump-chart-svg" class="bump-chart-svg"></svg>
+      <div class="print-meta-box">
+        <p><strong>대상 학생:</strong> <span id="p-student-name">김서울</span> 학생</p>
+        <p><strong>담당 교사:</strong> <span id="p-teacher-name">이진학</span> 교사 (인)</p>
+        <p><strong>발급 일자:</strong> 2026년 7월 31일</p>
+      </div>
+    </div>
+
+    <!-- Section 1: Score Summary -->
+    <div class="print-section">
+      <h2 class="print-sec-title">1. 학생 수능 성적 및 서울대 정시 환산 총점</h2>
+      <div class="print-score-table-box">
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th>국어 표준점수</th>
+              <th>수학 표준점수</th>
+              <th>탐구1 표준점수</th>
+              <th>탐구2 표준점수</th>
+              <th>영어 등급</th>
+              <th>과탐Ⅱ 가산점</th>
+              <th>교과평가 조합</th>
+              <th>서울대 최종 환산 총점</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="p-kor-std">134점</td>
+              <td id="p-math-std">142점</td>
+              <td id="p-tam1-std">68점</td>
+              <td id="p-tam2-std">66점</td>
+              <td id="p-eng-grade">2등급 (-0.5)</td>
+              <td id="p-tam-bonus">+3.0점 (Ⅰ+Ⅱ)</td>
+              <td id="p-eval-grade">A · B (19.0점)</td>
+              <td><strong id="p-final-score" style="color:#33412B; font-size:16px;">404.70점</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 2: Diagnosis & Match -->
+    <div class="print-section">
+      <h2 class="print-sec-title">2. 2026 어디가 공식 입결 기준 합격 진단 권역</h2>
+      <div class="print-grid-3">
+        <div class="print-card print-card-safe">
+          <h3 class="print-card-title">🟢 [안정 지원 권역]</h3>
+          <p class="print-card-desc">70% 컷 대비 +3.0점 이상 여유권 학과</p>
+          <ul id="p-safe-depts" class="print-dept-list">
+            <li>생명과학부 (70% 컷: 402.4점)</li>
+            <li>건축학과 (70% 컷: 401.4점)</li>
+            <li>조선해양공학과 (70% 컷: 402.2점)</li>
+          </ul>
+        </div>
+
+        <div class="print-card print-card-mod">
+          <h3 class="print-card-title">🟡 [적정 지원 권역]</h3>
+          <p class="print-card-desc">70% 컷 대비 ±2.0점 이내 경계권 학과</p>
+          <ul id="p-mod-depts" class="print-dept-list">
+            <li>컴퓨터공학부 (70% 컷: 403.9점)</li>
+            <li>화학생물공학부 (70% 컷: 402.9점)</li>
+            <li>재료공학부 (70% 컷: 404.5점)</li>
+          </ul>
+        </div>
+
+        <div class="print-card print-card-agg">
+          <h3 class="print-card-title">⚡ [소신 / 스나이핑 권역]</h3>
+          <p class="print-card-desc">추합 회전율 및 하향 펑크 가능성 학과</p>
+          <ul id="p-agg-depts" class="print-dept-list">
+            <li>전기정보공학부 (70% 컷: 410.3점, 추합률 28.3%)</li>
+            <li>수리과학부 (70% 컷: 413.0점, 추합률 55.6%)</li>
+          </ul>
         </div>
       </div>
+    </div>
+
+    <!-- Section 3: Factsheet Table -->
+    <div class="print-section">
+      <h2 class="print-sec-title">3. 주요 관심 학과 6개년 입결 & 추합 회전율 팩트시트</h2>
+      <table class="print-table">
+        <thead>
+          <tr>
+            <th>모집단위</th>
+            <th>2026 50% 컷</th>
+            <th>2026 70% 컷</th>
+            <th>수능 70% 평균백분위</th>
+            <th>6개년 평균순위</th>
+            <th>추합 인원 (추합률 %)</th>
+          </tr>
+        </thead>
+        <tbody id="p-factsheet-tbody">
+          <!-- Rendered via JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section 4: Teacher Comments -->
+    <div class="print-section">
+      <h2 class="print-sec-title">4. 담당 교사 진학 지도 총평 & 최종 전략 가이드</h2>
+      <div class="print-comment-box" id="p-teacher-comment">
+        수리과학부 및 통계학과는 타 의대 복수합격 이탈로 인한 추가합격 회전율(55.6%)이 높아 소신 상향 지원 시 유효한 전략 학과입니다. 과탐 Ⅱ 조합 (+3.0점 가산) 및 교과평가 (A·B 조합) 반영 시 최상위 컷 방어가 안정적입니다.
+      </div>
+    </div>
+
+    <div class="print-footer">
+      <p>SNU-Wise 서울대 정시 입시 컨설팅 플랫폼 | 본 보고서는 어디가 공식 전형결과 데이터를 기준으로 작성되었습니다.</p>
     </div>
   </div>
 

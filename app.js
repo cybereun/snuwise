@@ -31,6 +31,111 @@ document.addEventListener('DOMContentLoaded', () => {
   initBalanceTab();
   renderTypeComparisonTable();
   renderTierGuide();
+  initPrintModal();
+
+  /* ==========================================================================
+     0. Print Report Setup Modal & Document Renderer
+     ========================================================================== */
+  function initPrintModal() {
+    const printModal = document.getElementById('print-setup-modal');
+    const btnClosePrintModal = document.getElementById('btn-close-print-modal');
+    const btnExecutePrint = document.getElementById('btn-execute-print');
+
+    const inputStudentName = document.getElementById('print-student-name');
+    const inputTeacherName = document.getElementById('print-teacher-name');
+    const inputTeacherComment = document.getElementById('print-teacher-comment');
+
+    const btnPreset1 = document.getElementById('btn-preset-1');
+    const btnPreset2 = document.getElementById('btn-preset-2');
+    const btnPreset3 = document.getElementById('btn-preset-3');
+
+    // Open print modal
+    if (btnPrintReport) {
+      btnPrintReport.addEventListener('click', (e) => {
+        e.preventDefault();
+        printModal.classList.add('active');
+      });
+    }
+
+    if (btnClosePrintModal) {
+      btnClosePrintModal.addEventListener('click', () => {
+        printModal.classList.remove('active');
+      });
+    }
+
+    // Preset comment buttons
+    if (btnPreset1) {
+      btnPreset1.addEventListener('click', () => {
+        inputTeacherComment.value = "수리과학부 및 통계학과는 타 의대 복수합격 이탈로 인한 추가합격 회전율(55.6%)이 높아 소신 상향 지원 시 유효한 전략 학과입니다. 과탐 Ⅱ 조합 (+3.0점 가산) 및 교과평가 (A·B 조합) 반영 시 최상위 컷 방어가 안정적입니다.";
+      });
+    }
+    if (btnPreset2) {
+      btnPreset2.addEventListener('click', () => {
+        inputTeacherComment.value = "과탐 Ⅱ 과목 응시 가산점 (+3.0점/+5.0점) 적용으로 수능 환산점수 컷 여유분이 확보되어 주요 공학계열(전기정보, 기계) 및 약학계열 적정 합격선 방어가 매우 유효합니다.";
+      });
+    }
+    if (btnPreset3) {
+      btnPreset3.addEventListener('click', () => {
+        inputTeacherComment.value = "컴퓨터공학부 70% Cut(403.9점)은 탐구2 백분위 74% 합격자 포함 착시 현상으로, 실제 50% 컷(406.9점) 형성층이 두꺼우므로 교과평가 A·B 이상 조합 시 적정 도전 전략이 권장됩니다.";
+      });
+    }
+
+    // Execute Print A4 Document
+    if (btnExecutePrint) {
+      btnExecutePrint.addEventListener('click', () => {
+        // Fill meta
+        document.getElementById('p-student-name').textContent = inputStudentName.value || '김서울';
+        document.getElementById('p-teacher-name').textContent = inputTeacherName.value || '이진학';
+        document.getElementById('p-teacher-comment').textContent = inputTeacherComment.value || '';
+
+        // Fill Score data from calculator
+        const korStd = parseFloat(document.getElementById('calc-kor-std').value) || 134;
+        const mathStd = parseFloat(document.getElementById('calc-math-std').value) || 142;
+        const tam1Std = parseFloat(document.getElementById('calc-tam1-std').value) || 68;
+        const tam2Std = parseFloat(document.getElementById('calc-tam2-std').value) || 66;
+        const engGrade = parseInt(document.getElementById('calc-eng-grade').value) || 2;
+        const historyGrade = parseInt(document.getElementById('calc-history-grade').value) || 1;
+        const tamCombo = document.getElementById('calc-tam-combo').value;
+        const evalGrade = document.getElementById('calc-eval-grade').value;
+
+        const res = ADMISSIONS_DATA.calculateSNUScore(korStd, mathStd, tam1Std, tam2Std, engGrade, historyGrade, tamCombo, evalGrade);
+
+        document.getElementById('p-kor-std').textContent = `${korStd}점`;
+        document.getElementById('p-math-std').textContent = `${mathStd}점`;
+        document.getElementById('p-tam1-std').textContent = `${tam1Std}점`;
+        document.getElementById('p-tam2-std').textContent = `${tam2Std}점`;
+        document.getElementById('p-eng-grade').textContent = `${engGrade}등급`;
+        document.getElementById('p-tam-bonus').textContent = `+${res.tamBonus.toFixed(1)}점 (${tamCombo === 'I_II' ? 'Ⅰ+Ⅱ' : tamCombo === 'II_II' ? 'Ⅱ+Ⅱ' : 'Ⅰ+Ⅰ'})`;
+        document.getElementById('p-eval-grade').textContent = `${evalGrade} (${res.schoolEvalScore}점)`;
+        document.getElementById('p-final-score').textContent = `${res.finalTotal}점`;
+
+        // Render Factsheet Table (Top 5 target departments)
+        const factsheetTbody = document.getElementById('p-factsheet-tbody');
+        if (factsheetTbody) {
+          const sampleDepts = ADMISSIONS_DATA.departments.filter(d => ['math', 'stat', 'ece', 'cs', 'pharm', 'me'].includes(d.id));
+          factsheetTbody.innerHTML = sampleDepts.map(dept => {
+            const adiga = dept.adiga2026.general;
+            const stats = ADMISSIONS_DATA.getDepartmentStats(dept.id);
+            return `
+              <tr>
+                <td><strong>${dept.name}</strong></td>
+                <td>${adiga ? adiga.score50 + '점' : '-'}</td>
+                <td><strong>${adiga ? adiga.score70 + '점' : '-'}</strong></td>
+                <td>${adiga ? adiga.avg70 + '%' : '-'}</td>
+                <td>${stats.avgRank}위</td>
+                <td>${adiga ? adiga.additionalPassed + '명 (' + stats.additionalRate + '%)' : '-'}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        printModal.classList.remove('active');
+        setTimeout(() => {
+          window.print();
+        }, 100);
+      });
+    }
+  }
 
   /* ==========================================================================
      1. Navigation & Header Update (Desktop & Mobile Sync)
