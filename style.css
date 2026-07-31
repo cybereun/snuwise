@@ -212,6 +212,14 @@ body {
   gap: 12px;
 }
 
+#btn-print-report {
+  display: none !important;
+}
+
+#btn-print-report.show-print {
+  display: inline-flex !important;
+}
+
 .search-box {
   position: relative;
 }

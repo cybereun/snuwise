@@ -205,9 +205,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateHeader(tab) {
-    // Show Print Report button only in 'calc' (정시 점수 진단) tab
+    // Show Print Report button ONLY in 'calc' (두 번째 탭: 정시 점수 진단)
     if (btnPrintReport) {
-      btnPrintReport.style.display = (tab === 'calc') ? 'inline-flex' : 'none';
+      if (tab === 'calc') {
+        btnPrintReport.classList.add('show-print');
+      } else {
+        btnPrintReport.classList.remove('show-print');
+      }
     }
 
     if (tab === 'trend') {
