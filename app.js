@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // State Management
   let currentTab = 'trend';
   let selectedCategory = 'ALL';
-  let activeDeptId = 'math';
+  let activeDeptId = 'med';
   let searchKeyword = '';
 
   // DOM Elements
