@@ -257,7 +257,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const openModal = () => {
       chartModal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      setTimeout(() => drawBumpChartForSvg('modal-bump-chart-svg'), 50);
+      requestAnimationFrame(() => {
+        setTimeout(() => drawBumpChartForSvg('modal-bump-chart-svg'), 100);
+      });
     };
 
     const closeModal = () => {
@@ -293,10 +295,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const height = svg.clientHeight || 400;
     const isModal = svgId === 'modal-bump-chart-svg';
     
-    // Ample padding for single line wide badges (Left padding 100px prevents 2021학년도 badge clipping)
+    // Ample padding for single line wide badges (Left padding 160px guarantees 2021학년도 is 100% inside view)
     const padding = isModal 
-      ? { top: 40, right: 210, bottom: 60, left: 100 }
-      : { top: 30, right: 160, bottom: 60, left: 85 };
+      ? { top: 40, right: 220, bottom: 65, left: 160 }
+      : { top: 30, right: 170, bottom: 65, left: 120 };
 
     const chartW = width - padding.left - padding.right;
     const chartH = height - padding.top - padding.bottom;
