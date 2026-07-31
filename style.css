@@ -834,9 +834,14 @@ body {
     font-size: 15px;
   }
 
+  .modal-subtitle {
+    font-size: 11px;
+  }
+}
+
 /* Hide print-only report on normal screens */
 .print-only-report {
-  display: none;
+  display: none !important;
 }
 
 /* ==========================================================================

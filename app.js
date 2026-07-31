@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderTypeComparisonTable();
   renderTierGuide();
   initPrintModal();
+  updateHeader(currentTab);
 
   /* ==========================================================================
      0. Print Report Setup Modal & Document Renderer
