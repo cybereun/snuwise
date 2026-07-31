@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fill meta
         document.getElementById('p-student-name').textContent = inputStudentName.value || '김서울';
         document.getElementById('p-teacher-name').textContent = inputTeacherName.value || '이진학';
-        document.getElementById('p-teacher-comment').textContent = inputTeacherComment.value || '';
+        document.getElementById('p-teacher-comment').textContent = inputTeacherComment.value.trim() || '수리과학부 및 통계학과는 타 의대 복수합격 이탈로 인한 추가합격 회전율(55.6%)이 높아 소신 상향 지원 시 유효한 전략 학과입니다. 과탐 Ⅱ 조합 (+3.0점 가산) 및 교과평가 (A·B 조합) 반영 시 최상위 컷 방어가 안정적입니다.';
 
         // Fill Score data from calculator
         const korStd = parseFloat(document.getElementById('calc-kor-std').value) || 134;
